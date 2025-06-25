@@ -1,0 +1,90 @@
+<div class="event-list-container">
+  <h1>Events</h1>
+  
+  <!-- Filters -->
+  <div class="filter-section">
+    <h3>Filter Events</h3>
+    <div class="filter-form">
+      <div class="form-group">
+        <label for="dateFrom">From Date:</label>
+        <input 
+          type="date" 
+          id="dateFrom" 
+          [(ngModel)]="filter.dateFrom"
+          class="form-control">
+      </div>
+      
+      <div class="form-group">
+        <label for="dateTo">To Date:</label>
+        <input 
+          type="date" 
+          id="dateTo" 
+          [(ngModel)]="filter.dateTo"
+          class="form-control">
+      </div>
+      
+      <div class="form-group">
+        <label for="location">Location:</label>
+        <input 
+          type="text" 
+          id="location" 
+          [(ngModel)]="filter.location" 
+          placeholder="Enter location"
+          class="form-control">
+      </div>
+      
+      <div class="filter-actions">
+        <button 
+          (click)="applyFilter()" 
+          class="btn btn-primary" 
+          [disabled]="isLoading">
+          Apply Filter
+        </button>
+        <button 
+          (click)="clearFilter()" 
+          class="btn btn-secondary" 
+          [disabled]="isLoading">
+          Clear Filter
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="isLoading" class="loading">
+    Loading events...
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Events list -->
+  <div *ngIf="!isLoading" class="events-grid">
+    <div *ngFor="let event of filteredEvents" class="event-card">
+      <h3>{{ event.name }}</h3>
+      <p><strong>Location:</strong> {{ event.location }}</p>
+      <p><strong>Date:</strong> {{ formatDate(event.date) }}</p>
+      <p><strong>Start Time:</strong> {{ formatTime(event.startTime) }}</p>
+      
+      <div class="event-actions">
+        <a 
+          [routerLink]="['/event', event.id]" 
+          class="btn btn-primary">
+          View Details
+        </a>
+        <a 
+          [routerLink]="['/event', event.id, 'register']" 
+          class="btn btn-success">
+          Register
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- No events message -->
+  <div *ngIf="!isLoading && filteredEvents.length === 0" class="no-events">
+    <p>No events found matching your criteria.</p>
+  </div>
+</div>

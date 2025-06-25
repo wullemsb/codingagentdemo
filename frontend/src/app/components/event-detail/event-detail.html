@@ -1,0 +1,53 @@
+<div class="event-detail-container">
+  <!-- Loading indicator -->
+  <div *ngIf="isLoading" class="loading">
+    Loading event details...
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Event details -->
+  <div *ngIf="!isLoading && event" class="event-detail">
+    <h1>{{ event.name }}</h1>
+    
+    <div class="event-info">
+      <div class="info-item">
+        <strong>Location:</strong>
+        <span>{{ event.location }}</span>
+      </div>
+      
+      <div class="info-item">
+        <strong>Date:</strong>
+        <span>{{ formatDate(event.date) }}</span>
+      </div>
+      
+      <div class="info-item">
+        <strong>Start Time:</strong>
+        <span>{{ formatTime(event.startTime) }}</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a 
+        [routerLink]="['/event', event.id, 'register']" 
+        class="btn btn-success">
+        Register for Event
+      </a>
+      <a 
+        routerLink="/events" 
+        class="btn btn-secondary">
+        Back to Events
+      </a>
+    </div>
+  </div>
+
+  <!-- Event not found -->
+  <div *ngIf="!isLoading && !event && !errorMessage" class="not-found">
+    <h2>Event Not Found</h2>
+    <p>The event you're looking for doesn't exist.</p>
+    <a routerLink="/events" class="btn btn-primary">Back to Events</a>
+  </div>
+</div>
