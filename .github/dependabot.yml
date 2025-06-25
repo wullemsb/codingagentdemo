@@ -1,0 +1,43 @@
+version: 2
+updates:
+  # Backend .NET dependencies
+  - package-ecosystem: "nuget"
+    directory: "/backend"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "wullemsb"
+    assignees:
+      - "wullemsb"
+    commit-message:
+      prefix: "backend"
+      include: "scope"
+
+  # Frontend npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "wullemsb"
+    assignees:
+      - "wullemsb"
+    commit-message:
+      prefix: "frontend"
+      include: "scope"
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "wullemsb"
+    assignees:
+      - "wullemsb"
+    commit-message:
+      prefix: "ci"
+      include: "scope"

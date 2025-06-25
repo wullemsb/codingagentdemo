@@ -1,0 +1,55 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+      - 'datacontract/**'
+      - '.github/workflows/backend.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - 'datacontract/**'
+      - '.github/workflows/backend.yml'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Restore dependencies
+      run: dotnet restore backend/backend.csproj
+    
+    - name: Build
+      run: dotnet build backend/backend.csproj --no-restore --configuration Release
+    
+    - name: Test
+      run: dotnet test backend/backend.csproj --no-build --configuration Release --verbosity normal
+    
+    - name: Publish
+      run: dotnet publish backend/backend.csproj --no-build --configuration Release --output ./publish
+    
+    - name: Build Docker image
+      run: |
+        cd backend
+        docker build -t event-backend:${{ github.sha }} .
+        docker tag event-backend:${{ github.sha }} event-backend:latest
+    
+    - name: Save Docker image
+      run: docker save event-backend:latest -o backend-image.tar
+    
+    - name: Upload Docker image artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-docker-image
+        path: backend-image.tar
+        retention-days: 7
