@@ -1,1 +1,114 @@
-<p>event-registration works!</p>
+<div class="registration-container">
+  <!-- Loading indicator -->
+  <div *ngIf="isLoading" class="loading">
+    Loading event details...
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Success message -->
+  <div *ngIf="successMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+
+  <!-- Registration form -->
+  <div *ngIf="!isLoading && event" class="registration-form">
+    <h1>Register for Event</h1>
+    
+    <!-- Event details -->
+    <div class="event-summary">
+      <h2>{{ event.name }}</h2>
+      <p><strong>Location:</strong> {{ event.location }}</p>
+      <p><strong>Date:</strong> {{ formatDate(event.date) }}</p>
+      <p><strong>Start Time:</strong> {{ formatTime(event.startTime) }}</p>
+    </div>
+
+    <!-- Registration form -->
+    <form #registrationForm="ngForm" (ngSubmit)="onSubmit(registrationForm)" class="form">
+      <div class="form-group">
+        <label for="name">Name *</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name"
+          [(ngModel)]="registration.name" 
+          required
+          #nameField="ngModel"
+          class="form-control"
+          [class.error]="nameField.invalid && nameField.touched"
+          placeholder="Enter your full name">
+        <div *ngIf="nameField.invalid && nameField.touched" class="field-error">
+          Name is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address *</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email"
+          [(ngModel)]="registration.email" 
+          required
+          email
+          #emailField="ngModel"
+          class="form-control"
+          [class.error]="emailField.invalid && emailField.touched"
+          placeholder="Enter your email address">
+        <div *ngIf="emailField.invalid && emailField.touched" class="field-error">
+          <span *ngIf="emailField.errors?.['required']">Email is required</span>
+          <span *ngIf="emailField.errors?.['email']">Please enter a valid email address</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="pronouns">Pronouns (Optional)</label>
+        <input 
+          type="text" 
+          id="pronouns" 
+          name="pronouns"
+          [(ngModel)]="registration.pronouns" 
+          class="form-control"
+          placeholder="e.g., they/them, she/her, he/him">
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input 
+            type="checkbox" 
+            name="optInForCommunication"
+            [(ngModel)]="registration.optInForCommunication"
+            class="checkbox">
+          <span class="checkmark"></span>
+          I would like to receive updates and communications about future events
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="registrationForm.invalid || isSubmitting">
+          <span *ngIf="isSubmitting">Registering...</span>
+          <span *ngIf="!isSubmitting">Register for Event</span>
+        </button>
+        
+        <a 
+          [routerLink]="['/event', event.id]" 
+          class="btn btn-secondary">
+          Back to Event Details
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Event not found -->
+  <div *ngIf="!isLoading && !event && !errorMessage" class="not-found">
+    <h2>Event Not Found</h2>
+    <p>The event you're trying to register for doesn't exist.</p>
+    <a routerLink="/events" class="btn btn-primary">Back to Events</a>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+{
+  "name": "Event Management System",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers/features/dotnet:2": {
+      "version": "8.0",
+      "additionalVersions": "8.0"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "nodeGypDependencies": true,
+      "version": "20",
+      "nvmVersion": "latest"
+    },
+    "ghcr.io/devcontainers/features/azure-cli:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "dockerDashComposeVersion": "v2"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "angular.ng-template",
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-json",
+        "rangav.vscode-thunder-client",
+        "ms-azuretools.vscode-azurefunctions",
+        "ms-vscode.azure-repos",
+        "github.vscode-pull-request-github",
+        "eamodio.gitlens",
+        "ms-vscode-remote.remote-containers",
+        "bradlc.vscode-tailwindcss",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "ms-vscode.live-server"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "typescript.preferences.includePackageJsonAutoImports": "auto",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "files.exclude": {
+          "**/node_modules": true,
+          "**/bin": true,
+          "**/obj": true
+        },
+        "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true,
+        "omnisharp.enableImportCompletion": true
+      }
+    }
+  },
+  "forwardPorts": [4200, 7071],
+  "portsAttributes": {
+    "4200": {
+      "label": "Angular Frontend",
+      "onAutoForward": "notify"
+    },
+    "7071": {
+      "label": "Azure Functions Backend",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/post-start.sh",
+  "remoteUser": "codespace"
+}
